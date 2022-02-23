@@ -62,24 +62,24 @@ def analyse_record(card_lists):
     num = 1
     wuxing_baodi = 90
     sixing_baodi = 10
-    jinse = 0
+    gold_num = 0
 
     for card in card_lists:
         if card['star'] == '5':
             print('【{}】({})'.format(card['name'], num))
             wuxing_baodi = 90
-            jinse += 1
+            gold_num += 1
         else:
             wuxing_baodi -= 1
         
-        if card['star'] == '4':
+        if card['star'] == '4' or card['star'] == '5':
             sixing_baodi = 10
         else:
             sixing_baodi -= 1
 
         num += 1
 
-    print('共{}抽，{}金'.format(len(card_lists), jinse))
+    print('共{}抽，{}金'.format(len(card_lists), gold_num))
     print('距离四星保底还有{}抽'.format(sixing_baodi))
     print('距离五星保底还有{}抽\n'.format(wuxing_baodi))
     
