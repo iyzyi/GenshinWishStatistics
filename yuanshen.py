@@ -32,6 +32,7 @@ def search_record(access_key, type):
 
     while True:
         url = 'https://hk4e-api.mihoyo.com/event/gacha_info/api/getGachaLog?{}&gacha_type={}&page={}&size=6&end_id={}'.format(access_key, type, page, end_id)
+        print('\r正在获取第{}页抽卡记录......'.format(page), end='')
         res = requests.get(url)
         data = res.json()
 
@@ -47,13 +48,15 @@ def search_record(access_key, type):
 
             end_id = list['id']
 
-        time.sleep(0.6)
+        time.sleep(0.3)
         page += 1
 
     card_lists = card_lists[::-1]
     # for card in card_lists:
     #     print(card)
     # print(len(card_lists))
+
+    print('\r                                           ')
     return card_lists
 
 
@@ -63,12 +66,14 @@ def analyse_record(card_lists):
     wuxing_baodi = 90
     sixing_baodi = 10
     gold_num = 0
+    last_wuxing = 0
 
     for card in card_lists:
         if card['star'] == '5':
-            print('【{}】({})'.format(card['name'], num))
+            print('【{}】({}-{})'.format(card['name'], num, num - last_wuxing))
             wuxing_baodi = 90
             gold_num += 1
+            last_wuxing = num
         else:
             wuxing_baodi -= 1
         
@@ -78,8 +83,12 @@ def analyse_record(card_lists):
             sixing_baodi -= 1
 
         num += 1
+    
+    if gold_num != 0:
+        print('共{}抽，{}金，平均{}抽出金'.format(len(card_lists), gold_num, len(card_lists) // gold_num))
+    else:
+        print('共{}抽，{}金'.format(len(card_lists), gold_num))
 
-    print('共{}抽，{}金'.format(len(card_lists), gold_num))
     print('距离四星保底还有{}抽'.format(sixing_baodi))
     print('距离五星保底还有{}抽\n'.format(wuxing_baodi))
     
