@@ -12,10 +12,9 @@ def get_log_url():
             log = f.read()
         log_url = re.search(r'https://webstatic.mihoyo.com.+?#/log', log)
         if not log_url:
-            print('日志文件中未找到抽卡log记录的网址，请先在游戏中祈愿界面点击一次“历史记录”再运行本程序')
+            print('日志文件中未找到抽卡log记录的网址，请在游戏中打开祈愿界面，断网后点击历史记录，然后点击右上角刷新按钮。')
         else:
             log_url = log_url.group()
-            #print(log_url)
             return log_url
 
 
@@ -25,13 +24,14 @@ def to_time_stamp(time_str):
 
 
 # 从云端获取抽卡记录
-def search_record(access_key, type):
+def search_record(main_url, type):
     card_lists = []
     end_id = 0
     page = 1
 
     while True:
-        url = 'https://hk4e-api.mihoyo.com/event/gacha_info/api/getGachaLog?{}&gacha_type={}&page={}&size=6&end_id={}'.format(access_key, type, page, end_id)
+        main_param = re.search(r'index.html\?(win_mode=.+?hk4e_cn)#/log', main_url).group(1)
+        url = 'https://hk4e-api.mihoyo.com/event/gacha_info/api/getGachaLog?{}&gacha_type={}&page={}&size=5&end_id={}'.format(main_param, type, page, end_id)
         print('\r正在获取第{}页抽卡记录......'.format(page), end='')
         res = requests.get(url)
         data = res.json()
@@ -115,16 +115,15 @@ if __name__ == '__main__':
     print('日志网址：{}\n'.format(log_url))
 
     if log_url:
-        access_key = re.search(r'index.html\?(authkey.+?)#/log', log_url).group(1)
 
         # 角色活动祈愿与角色活动祈愿-2
-        yuanshen_cards_analyse(access_key, 301)
+        yuanshen_cards_analyse(log_url, 301)
 
         # 常驻祈愿
-        yuanshen_cards_analyse(access_key, 200)
+        yuanshen_cards_analyse(log_url, 200)
 
         # 武器活动祈愿
-        yuanshen_cards_analyse(access_key, 400)
+        yuanshen_cards_analyse(log_url, 400)
 
         # 新手祈愿
-        yuanshen_cards_analyse(access_key, 100)
+        yuanshen_cards_analyse(log_url, 100)
