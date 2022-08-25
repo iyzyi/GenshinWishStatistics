@@ -10,6 +10,7 @@ class GenshinWishStatistics:
         self.wu_qi_chi = []
         self.xin_shou_chi = []
         self.id_local_table = []
+        remote_record_count = 0
     
         if self.load_local_record():
             if self.get_wish_url():
@@ -85,7 +86,7 @@ class GenshinWishStatistics:
         wish_url = re.search(r'https://webstatic.mihoyo.com.+?#/log', log)
 
         if not wish_url:
-            print('[ERROR] 本地日志中未找到祈愿抽卡记录的网址，以下仅显示本地保存的祈愿抽卡记录数据\n如需查看最新祈愿记录，请在游戏中打开祈愿界面，挂假代理导致间接断网后点击历史记录，出现白色空白页面时则为成功。')
+            print('[ERROR] 本地日志中未找到祈愿抽卡记录的网址，以下仅显示本地保存的祈愿抽卡记录数据。如需查看最新祈愿记录，请在游戏中打开祈愿界面，挂假代理导致间接断网后多次点击历史记录，出现灰色空白页面时则为成功。\n\n')
             return False
         else:
             self.wish_url = wish_url.group()
@@ -292,7 +293,7 @@ class GenshinWishStatistics:
 
         print('{}统计{}'.format('=' * 28, '=' * 28))
         print('总抽数：        {:<14d}'.format(len(self.wu_qi_chi)), end='')
-        print('已垫抽数：      %d' % (len(self.wu_qi_chi) - last_five_star_index))
+        print('已垫抽数：        %d' % (len(self.wu_qi_chi) - last_five_star_index))
         print('五星个数：      {:<14d}'.format(five_star_wu_qi_count), end='')
         if five_star_wu_qi_count != 0:
             print('平均五星抽数：    %.2f' % (len(self.wu_qi_chi) / five_star_wu_qi_count))
@@ -329,7 +330,7 @@ class GenshinWishStatistics:
 
         print('{}统计{}'.format('=' * 28, '=' * 28))
         print('总抽数：        {:<14d}'.format(len(self.xin_shou_chi)), end='')
-        print('已垫抽数：      %d' % (len(self.xin_shou_chi) - last_five_star_index))
+        print('已垫抽数：        %d' % (len(self.xin_shou_chi) - last_five_star_index))
         print('五星个数：      {:<14d}'.format(five_star_character_count), end='')
         if five_star_character_count != 0:
             print('平均五星抽数：    %.2f' % (len(self.xin_shou_chi) / five_star_character_count))
