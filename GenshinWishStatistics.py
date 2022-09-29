@@ -81,7 +81,7 @@ class GenshinWishStatistics:
             print('[ERROR] %s不存在' % log_path)
             return False
 
-        with open(log_path, 'r', encoding='utf-8')as f:
+        with open(log_path, 'r', encoding='utf-8', errors='ignore')as f:
             log = f.read()
         wish_url = re.search(r'https://webstatic.mihoyo.com.+?#/log', log)
 
@@ -182,7 +182,7 @@ class GenshinWishStatistics:
         zui_fei_count = -1
         last_five_star_index = 0
 
-        for i in range(len(self.xian_ding_chi) - 1, 0, -1):
+        for i in range(len(self.xian_ding_chi) - 1, -1, -1):
             temp += 1
             wish = self.xian_ding_chi[i]
             if wish['rank_type'] == '5':
@@ -240,7 +240,7 @@ class GenshinWishStatistics:
         zui_fei_count = -1
         last_five_star_index = 0 
 
-        for i in range(len(self.chang_zhu_chi) - 1, 0, -1):
+        for i in range(len(self.chang_zhu_chi) - 1, -1, -1):
             temp += 1
             wish = self.chang_zhu_chi[i]
             if wish['rank_type'] == '5':
@@ -277,7 +277,7 @@ class GenshinWishStatistics:
         zui_fei_count = -1
         last_five_star_index = 0
 
-        for i in range(len(self.wu_qi_chi) - 1, 0, -1):
+        for i in range(len(self.wu_qi_chi) - 1, -1, -1):
             temp += 1
             wish = self.wu_qi_chi[i]
             if wish['rank_type'] == '5':
@@ -314,7 +314,7 @@ class GenshinWishStatistics:
         zui_fei_count = -1
         last_five_star_index = 0
 
-        for i in range(len(self.xin_shou_chi) - 1, 0, -1):
+        for i in range(len(self.xin_shou_chi) - 1, -1, -1):
             temp += 1
             wish = self.xin_shou_chi[i]
             if wish['rank_type'] == '5':
