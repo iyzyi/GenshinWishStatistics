@@ -20,9 +20,14 @@ class GenshinWishStatistics:
                 f = self.get_wish_url_mode_1()
             elif mode == '2':
                 f = self.get_wish_url_mode_2(fiddler_url)
+            elif mode == '3':
+                f = True
 
             if f:
-                remote_record_count = self.get_remote_record()      # 祈愿记录增量条数
+                if mode == '1' or mode == '2':
+                    remote_record_count = self.get_remote_record()      # 祈愿记录增量条数
+                else:
+                    remote_record_count = 0
 
                 self.show_xian_ding_chi_record()
                 self.show_chang_zhu_chi_record()
@@ -375,10 +380,12 @@ class GenshinWishStatistics:
 
 
 if __name__ == '__main__':
-    choice = input('请选择工作模式：\n1) 挂假代理多次点击《历史记录》后运行此脚本\n2) 手动使用fiddler获取形如“hk4e-api.mihoyo.com/event/gacha_info/api/getGachaLog”的url\n你的选择：')
+    choice = input('请选择工作模式：\n1) 挂假代理多次点击《历史记录》后运行此脚本\n2) 手动使用fiddler获取形如“hk4e-api.mihoyo.com/event/gacha_info/api/getGachaLog”的url\n3) 仅查看本地数据\n你的选择：')
     if choice == '1':
         app = GenshinWishStatistics(choice)
     elif choice == '2':
         fiddler_url = input('请输入使用fiddler获取的url：')
         # 例如： https://hk4e-api.mihoyo.com/event/gacha_info/api/getGachaLog?win_mode=fullscreen&authkey_ver=1&sign_type=2&auth_appid=webview_gacha&init_type=301&gacha_id=4157ddbd5d5fb886f55ca7b111a3e568e663f3be&timestamp=1677627587&lang=zh-cn&device_type=pc&game_version=CNRELWin3.5.0_R13415299_S13402347_D13449934&plat_type=pc&region=cn_gf01&authkey=BBYXzHu3xASwYrF4XPT22QkU5JQlFILjZ%2bDYrqXwpaoCYaqHExizEZril%2bm5XzVGchwWh%2fFxcp4Uw9tDKvbrSDp90EwFyfN1p7uFwShsaFGI4mD9TEF%2bsnqsqUFiIyQL7Kx6%2b9okwDsBwW8CKgRkfdp7GVNDuJub1TwCr15iEad%2fODA1ne0B6%2bUYQgYCJH%2fVXnAFuzTu6%2ffmj0fhMhRsTqjRgo0ZNOpL7T%2boC7bhkFdui1g1gAZxt%2bgSO0eMER2FnCLr416hrw26TKkpis%2bzSf4FDO1247MPELmQahM0DQwOWzZ%2bGTKyUEF7D2TC81QEtU0GNRB7z0J8J5w3EfXrd8tP7HbxOwl0tdq3mhyLbBrjVPCFsf6G8cyF2Bo0pasRQtsL94MOilEQVnfBb4PlTJdYEpXgMSaS75SEulwPJNTY4qfkZUZO1a6Om6iy0%2fJ8rzFStNPrH7ZHjVHeVLz6AlqT3oFzdqFcWeOwJYhyhoiGt58xYhs59OP%2fyiEBRWMCQIeQTWmLXxdJrKYsOKGAQHI7u%2flE1qpUvtXW0Bd%2fe3p6XXgv5a%2b30VevAfLEpl5Mkbrgwzcy5As%2fNFkvzjHXm4JM7xNKGsKImXCfpBtshIqNv3uiuAtsSDcJXxXxQsoR69rAiyNOy7BaZxQ6O94SrWc4DgKsgKG%2fWrhNYhgVssosrEO6prj7nVwEYeFt8o7D%2fLVsQ089jFd4nrvT6grCZpI%2bipTEuiwabbDtXnWkWSUTwkpPYhzl0KNgTZZ8h4iLAN0Y%2bn6Z3Dx6pRjsRMWjwP6vlHi6HSAxJK9fy9Ovl7WXQq24YGYuVqc6gr3vNEzjhCr%2f%2f4ojPT%2fjO9uPOfksqPOdp5f%2bnUBm8EtHFcHAG8WPQcl2OHp5%2fEik%2bZeZo%2fUsWox1kOBC2pu%2fHJlY6MyoE6PwDfG1z%2bVEcWDOh1sJzrWDaa0c%2fKZ8D8w4mfhn%2fSHLTd7venTUftKIKUNvdj6EafPCKypSbLnPfNzP0HUZ8DNi5LztFqjdDZGsGwWvyNOu&game_biz=hk4e_cn&gacha_type=301&page=2&size=5&end_id=1677301560000984863
         app = GenshinWishStatistics(choice, fiddler_url)
+    elif choice == '3':
+        app = GenshinWishStatistics(choice)
