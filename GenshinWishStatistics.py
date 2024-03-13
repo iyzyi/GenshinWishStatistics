@@ -8,6 +8,7 @@ class GenshinWishStatistics:
         self.xian_ding_chi = []
         self.chang_zhu_chi = []
         self.wu_qi_chi = []
+        self.hun_he_chi = []
         self.xin_shou_chi = []
         self.id_local_table = []
         self.mode = mode
@@ -32,6 +33,7 @@ class GenshinWishStatistics:
                 self.show_xian_ding_chi_record()
                 self.show_chang_zhu_chi_record()
                 self.show_wu_qi_chi_record()
+                self.show_hun_he_chi_record()
                 self.show_xin_shou_chi_record()
 
                 if remote_record_count > 0:
@@ -68,6 +70,9 @@ class GenshinWishStatistics:
                     self.id_local_table.append(wish['id'])
                 elif wish['gacha_type'] == '302':                                   # 302是武器池
                     self.wu_qi_chi.append(wish)
+                    self.id_local_table.append(wish['id'])
+                elif wish['gacha_type'] == '500':                                   # 500是混池
+                    self.hun_he_chi.append(wish)
                     self.id_local_table.append(wish['id'])
                 elif wish['gacha_type'] == '100':                                   # 100是新手池
                     self.xin_shou_chi.append(wish)
@@ -121,6 +126,7 @@ class GenshinWishStatistics:
         count += self.get_remote_record_with_type(301)
         count += self.get_remote_record_with_type(200)
         count += self.get_remote_record_with_type(302)
+        count += self.get_remote_record_with_type(500)
         count += self.get_remote_record_with_type(100)
         print('\r[INFO] 成功增量获取官方抽卡记录，共%d条                      \n\n' % count)
         return count
@@ -146,12 +152,18 @@ class GenshinWishStatistics:
                 type_str = '常驻池'
             elif type == 302:
                 type_str = '武器池'
+            elif type == 500:
+                type_str = '混合池'
             elif type == 100:
                 type_str = '新手池'
             print('\r[INFO] 正在获取{}第{}页抽卡记录......'.format(type_str, page), end='')
 
             res = requests.get(url)
             data = res.json()
+
+            if not data['data']:
+                print('\n[ERROR] {}'.format(data['message']))
+                exit()
 
             if not data['data']['list']:
                 break
@@ -165,6 +177,8 @@ class GenshinWishStatistics:
                     f_continue = self.remove_dup_append(self.chang_zhu_chi, wish)
                 elif type == 302:
                     f_continue = self.remove_dup_append(self.wu_qi_chi, wish)
+                elif type == 500:
+                    f_continue = self.remove_dup_append(self.hun_he_chi, wish)
                 elif type == 100:
                     f_continue = self.remove_dup_append(self.xin_shou_chi, wish)
                 if not f_continue:
@@ -325,6 +339,44 @@ class GenshinWishStatistics:
         else:
             print('平均五星抽数：    INF')
         print('最欧抽数：      {:<14d}最非抽数：        {}'.format(zui_ou_count, zui_fei_count))
+        print('\n\n')
+
+
+    # 统计混合池数据
+    def show_hun_he_chi_record(self):
+        print('{}混合池{}'.format('=' * 27, '=' * 27))
+        self.hun_he_chi = sorted(self.hun_he_chi, key=operator.itemgetter('id'), reverse=True)
+
+        temp = 0
+        five_star_character_count = 0
+        zui_ou_count = 999
+        zui_fei_count = -1
+        last_five_star_index = 0
+
+        for i in range(len(self.hun_he_chi) - 1, -1, -1):
+            temp += 1
+            wish = self.hun_he_chi[i]
+            if wish['rank_type'] == '5':
+                print('【%s】%s%.2d' % (wish['name'], ' '*(16-2*len(wish['name'])), temp), ' '*6, wish['time'])
+                five_star_character_count += 1
+                last_five_star_index = len(self.hun_he_chi) - i
+
+                if temp > zui_fei_count:
+                    zui_fei_count = temp
+                if temp < zui_ou_count:
+                    zui_ou_count = temp
+                temp = 0
+
+        print('{}统计{}'.format('=' * 28, '=' * 28))
+        print('总抽数：        {:<14d}'.format(len(self.hun_he_chi)), end='')
+        print('已垫抽数：        %d' % (len(self.hun_he_chi) - last_five_star_index))
+        print('五星个数：      {:<14d}'.format(five_star_character_count), end='')
+        if five_star_character_count != 0:
+            print('平均五星抽数：    %.2f' % (len(self.hun_he_chi) / five_star_character_count))
+            print('最欧抽数：      {:<14d}最非抽数：        {}'.format(zui_ou_count, zui_fei_count))
+        else:
+            print('平均五星抽数：    INF')
+            print('最欧抽数：      INF           最非抽数：        INF')
         print('\n\n')
 
 
