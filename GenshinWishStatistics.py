@@ -107,7 +107,7 @@ class GenshinWishStatistics:
             return True
     
     def get_wish_url_mode_2(self, fiddler_url):
-        res = re.search(r'(https://hk4e-api\.mihoyo\.com/event/gacha_info/api/getGachaLog\?.+?)&gacha_type', fiddler_url)
+        res = re.search(r'(https://public-operation-hk4e\.mihoyo\.com/gacha_info/api/getGachaLog\?.+?)&gacha_type', fiddler_url)
         if res:
             self.wish_url_main = res.group(1)
             return True
