@@ -1,6 +1,6 @@
 from codecs import ignore_errors
 from unittest import result
-import requests, re, os, time, json, operator
+import requests, re, os, time, json, operator, time
 
 class GenshinWishStatistics:
 
@@ -158,6 +158,7 @@ class GenshinWishStatistics:
                 type_str = '新手池'
             print('\r[INFO] 正在获取{}第{}页抽卡记录......'.format(type_str, page), end='')
 
+            time.sleep(0.3)
             res = requests.get(url)
             data = res.json()
 
