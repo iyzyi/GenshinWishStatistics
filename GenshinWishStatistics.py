@@ -419,7 +419,7 @@ class GenshinWishStatistics:
 
     def save_wish_json(self):
         print('\n\n\n[INFO] 正在增量存储官方抽卡记录......', end='')
-        all_wish_list = self.xian_ding_chi + self.chang_zhu_chi + self.wu_qi_chi + self.xin_shou_chi
+        all_wish_list = self.xian_ding_chi + self.chang_zhu_chi + self.wu_qi_chi + self.hun_he_chi + self.xin_shou_chi
         all_wish_list = sorted(all_wish_list, key=operator.itemgetter('id'), reverse=True)
         all_wish_json = json.dumps(all_wish_list, ensure_ascii=False, indent=4)
 
